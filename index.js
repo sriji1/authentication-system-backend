@@ -1,12 +1,9 @@
-import express from "express";
-import dotenv from "dotenv";
-import pkg from "express-mongo-sanitize";
-import connectDB from "./config/db.js";
-const mongoSanitize = pkg;
-
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoSanitize = require("express-mongo-sanitize");
+const connectDB = require("./config/db.js");
 // importing routes
-import userRoutes from "./routes/userRoutes.js";
-
+const userRoutes = require("./routes/userRoutes.js");
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -16,7 +13,7 @@ const NODENV = process.env.NODE_ENV;
 const app = express();
 
 // database connection
-await connectDB();
+connectDB();
 
 //middlewares
 

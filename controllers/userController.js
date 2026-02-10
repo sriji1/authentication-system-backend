@@ -1,10 +1,12 @@
-import TryCatch from "../middlewares/TryCatch.js"
+const TryCatch = require("../middlewares/TryCatch");
 
-export const createUser =  TryCatch(async (req, res) => {
+const createUser = TryCatch(async (req, res) => {
   const { name, email, password, phone, role } = req.body;
 
   res.json({
     name,
-    phone
-  })
-})
+    phone,
+  });
+});
+
+module.exports = { createUser };
