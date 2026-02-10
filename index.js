@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
 // importing routes
-import userRoutes from './routes/userRoutes.js'
-
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 await connectDB();
@@ -12,7 +11,7 @@ await connectDB();
 const app = express();
 
 //using routes
-app.use("/api/v1", userRoutes)
+app.use("/api/v1", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
