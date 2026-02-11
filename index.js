@@ -27,8 +27,6 @@ const redisClient = createClient({
   url: redisUrl,
 });
 
-module.exports = { redisClient };
-
 redisClient
   .connect()
   .then(() => console.log("Connected to Redis"))
@@ -45,3 +43,5 @@ app.use("/api/v1", userRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT} in ${NODENV} environment`);
 });
+
+module.exports = {redisClient}

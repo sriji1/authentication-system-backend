@@ -3,6 +3,7 @@ const { createUserSchema } = require("../config/zodValidationShema");
 const TryCatch = require("../middlewares/TryCatch");
 const sanitize = require("mongo-sanitize");
 const User = require("../models/userModel");
+const { getVerifyEmailHtml } = require("../config/htmlTemplate");
 
 const createUser = TryCatch(async (req, res) => {
   // request sanitization and validations
@@ -65,9 +66,25 @@ const createUser = TryCatch(async (req, res) => {
 
   const verifyKey = `verify:${verifyToken}`;
 
-  res.json({
+  const dataToStore = JSON.stringify({
     name,
     email,
+    passwoed: hashPassword,
+  });
+
+  await redisClient.set(verifyKey, dataToStore, { EX: 300 });
+
+  const subject = "verify your email for Account Creation";
+
+  const html = getVerifyEmailHtml({ email, verifyToken });
+
+  await sendMail({ email, subject, html });
+
+  await redisClient.set(rateLimitKey, "true", { EX: 60 });
+
+  res.json({
+    message:
+      "If your email is valid, a verification link has been sent. It will expire in 5 minutes.",
   });
 });
 
