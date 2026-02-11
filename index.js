@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
+const { createClient } = require("redis");
 // importing routes
 const userRoutes = require("./routes/userRoutes.js");
 dotenv.config();
@@ -14,8 +15,26 @@ const app = express();
 // database connection
 connectDB();
 
-//middlewares
+// redis connection
+const redisUrl = process.env.REDIS_URL;
 
+if (!redisUrl) {
+  console.log("Missing Redis URL");
+  process.exit(1);
+}
+
+const redisClient = createClient({
+  url: redisUrl,
+});
+
+module.exports = { redisClient };
+
+redisClient
+  .connect()
+  .then(() => console.log("Connected to Redis"))
+  .catch((err) => console.log(err));
+
+//middlewares
 // req body parser
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ limit: "20kb", extended: true }));
